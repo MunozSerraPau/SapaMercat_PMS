@@ -3,8 +3,8 @@ package Productes;
 public class Electronica extends Productes {
     protected int diesGarantiaElectronica;
 
-    public Electronica(float preuProducte, String nomProducte, int codiBarresProducte, int diesGarantiaElectronica) {
-        super(preuProducte, nomProducte, codiBarresProducte);
+    public Electronica(String nomProducte, float preuProducte, int codiBarresProducte, int diesGarantiaElectronica) {
+        super(nomProducte, preuProducte, codiBarresProducte);
         this.diesGarantiaElectronica = diesGarantiaElectronica;
     }
 }

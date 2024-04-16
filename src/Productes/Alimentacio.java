@@ -1,14 +1,19 @@
 package Productes;
 
-import java.time.LocalDate;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
 
 public class Alimentacio extends Productes {
     protected String dataCaducitatAlimentacio;
+    protected int diesCaducitat;
 
-    public Alimentacio(float preuProducte, String nomProducte, int codiBarresProducte, String dataCaducitatAlimentacio) {
-        super(preuProducte, nomProducte, codiBarresProducte);
+    public Alimentacio(String nomProducte, float preuProducte, int codiBarresProducte, String dataCaducitatAlimentacio) {
+        super(nomProducte, preuProducte, codiBarresProducte);
         this.dataCaducitatAlimentacio = dataCaducitatAlimentacio;
     }
+
 
     @Override
     public String toString() {
@@ -18,20 +23,29 @@ public class Alimentacio extends Productes {
                 ", CodiBarres= " + codiBarresProducte + "\n";
     }
 
-    /*
-    public String getDataCaducitatAlimentacio() {
-        int diesDiferencia;
+    private static long calcularDiferenciaDies (int dia, int mes, int any) {
+        LocalDate fecha1 = LocalDate.now();
+        LocalDate fecha2 = LocalDate.of(any, mes, dia);
 
-        String edat;
-        String dataActual;
+        return ChronoUnit.DAYS.between(fecha1, fecha2);
 
-        dataActual = LocalDate.now().toString().substring(0, 4);
+        /*  ######## OPCIÓ 2 ########
+        int diesDif = 0;
 
-        anyNaix = dataCaducitatAlimentacio.substring(6);
+        LocalDate fecha1 = LocalDate.of(any, mes, dia);
+        LocalDate fecha2 = LocalDate.now();
 
-        int edat1 = Integer.parseInt(dataActual) - Integer.parseInt(anyNaix);
+        Period diferenciaDeDies = Period.between(fecha2, fecha1);
+        if (diferenciaDeDies.getYears() >= 1) {
+            for (int i = 0; i < diferenciaDeDies.getYears(); i++){
+                diesDif += 365;
+            }
+        }
+        diesDif += diferenciaDeDies.getDays() + (diferenciaDeDies.getMonths() * 30);
 
-        return edat;
+        return diesDif;
+         */
+
     }
-    */
+
 }

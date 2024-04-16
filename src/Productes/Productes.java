@@ -5,9 +5,9 @@ public class Productes{
     protected String nomProducte;
     protected int codiBarresProducte;
 
-    public Productes(float preuProducte, String nomProducte, int codiBarresProducte) {
-        this.preuProducte = preuProducte;
+    public Productes(String nomProducte, float preuProducte, int codiBarresProducte) {
         this.nomProducte = nomProducte;
+        this.preuProducte = preuProducte;
         this.codiBarresProducte = codiBarresProducte;
     }
 }
