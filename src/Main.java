@@ -8,11 +8,20 @@ public class Main {
         int opcioMneuIni,opcioMenuProd;
 
         Productes[] llistaCompra = new Productes[100];
-        llistaCompra[0] = new Alimentacio("Oli", 5.50F, 1234, "04-10-2004");
-        llistaCompra[1] = new Alimentacio("Tomaquet", 7.45F, 2345, "04-10-2004");
+        llistaCompra[0] = new Alimentacio("Poma", 1F, 1234, "22/06/2024");
+        llistaCompra[1] = new Alimentacio("Tomaquet", 7.45F, 2345, "27/07/2024");
+        llistaCompra[2] = new Textil("Samarreta", 22F, 3456, "cotó");
+        llistaCompra[3] = new Textil("Pantalo", 35.7F, 4567, "Plastic");
+        llistaCompra[4] = new Electronica("TV", 333F, 5678, 5434);
+        llistaCompra[5] = new Electronica("PC", 56.7F, 6789, 57);
+
 
         System.out.println(llistaCompra[0]);
         System.out.println(llistaCompra[1]);
+        System.out.println(llistaCompra[2]);
+        System.out.println(llistaCompra[3]);
+        System.out.println(llistaCompra[4]);
+        System.out.println(llistaCompra[5]);
 
         do {
             menuInici();
