@@ -18,9 +18,9 @@ public class Electronica extends Productes {
 
     @Override
     public String toString() {
-        return "Nom Producte= " + nomProducte +
-                ", Preu= " + preuProducte +
-                ", Data Caducitat= " + diesGarantiaElectronica +
-                ", CodiBarres= " + codiBarresProducte;
+        return "Nom Producte: " + nomProducte +
+                "\nPreu: " + preuProducte +
+                "\nGarantia (dies): " + diesGarantiaElectronica +
+                "\nCodi de Barres: " + codiBarresProducte;
     }
 }

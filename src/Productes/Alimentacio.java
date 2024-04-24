@@ -77,10 +77,11 @@ public class Alimentacio extends Productes {
 
     @Override
     public String toString() {
-        return "Nom Producte= " + nomProducte +
-                ", Preu= " + preuProducte +
-                ", Data Caducitat= " + dataCaducitatAlimentacio +
-                ", CodiBarres= " + codiBarresProducte;
+        return "Nom Producte: " + nomProducte +
+                "\nPreu: " + preuProducte +
+                "\nCodi de Barres: " + codiBarresProducte +
+                "\nData de Caducitat (dd/mm/aaaa): " + dataCaducitatAlimentacio;
+
     }
 
 }
