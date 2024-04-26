@@ -8,29 +8,11 @@ import java.util.HashMap;
 public class Main {
     public static Scanner scan = new Scanner(System.in);
     protected static ArrayList<Productes> llista = new ArrayList<>(100);
-    protected static HashMap<Integer, Productes> llistaCompra = new HashMap<Integer, Productes>();
-    static int contadorA = 0, contadorT = 0, contadorE = 0;
+    protected static HashMap<String, String[]> llistaCompra = new HashMap<>();
 
 
     public static void main(String[] args) {
         int opcioMenuIni;
-
-        /*
-        Productes[] llistaCompra = new Productes[100];
-        llistaCompra[0] = new Alimentacio("Poma", 1F, 1234, "22/06/2024");
-        llistaCompra[1] = new Alimentacio("Tomaquet", 7.45F, 2345, "27/07/2024");
-        llistaCompra[2] = new Textil("Samarreta", 22F, 3456, "cotó");
-        llistaCompra[3] = new Textil("Pantalo", 35.7F, 4567, "Plastic");
-        llistaCompra[4] = new Electronica("TV", 333F, 5678, 5434);
-        llistaCompra[5] = new Electronica("PC", 56.7F, 6789, 57);
-
-        System.out.println(llistaCompra[0]);
-        System.out.println(llistaCompra[1]);
-        System.out.println(llistaCompra[2]);
-        System.out.println(llistaCompra[3]);
-        System.out.println(llistaCompra[4]);
-        System.out.println(llistaCompra[5]);
-         */
 
         do {
             menuInici();
@@ -47,18 +29,18 @@ public class Main {
                     mostrarCarroDeCompra();
                     break;
                 case 0:
-                    System.exit(1);
                     break;
                 default:
                     System.out.println("Escriu un numero que estigui entre el 0 i el 3, gràcies!");
             }
 
         } while (opcioMenuIni != 0);
+        System.exit(1);
     }
 
     protected static void comprarProductes() {
-        String nom,dataCadu,compoTextil;
-        int opcioMenuProd,codi,diesGaran;
+        String nom,dataCadu,compoTextil,codi;
+        int opcioMenuProd,diesGaran;
         float preu;
 
 
@@ -76,13 +58,12 @@ public class Main {
                     preu = scan.nextFloat();
                     scan.nextLine();
                     System.out.print("Codi de barres: ");
-                    codi = scan.nextInt();
-                    scan.nextLine();
+                    codi = scan.nextLine();
                     System.out.print("Data de caducitat (dd/mm/aaaa): ");
                     dataCadu = scan.nextLine();
 
-
-                    llistaCompra.put(codi, new Alimentacio(nom, preu, codi, dataCadu));
+                    llista.add(new Alimentacio(nom, preu, codi, dataCadu));
+                    afegirProducte(nom, codi);
 
                     break;
                 case 2:
@@ -95,9 +76,10 @@ public class Main {
                     System.out.print("Composició: ");
                     compoTextil = scan.nextLine();
                     System.out.print("Codi de barres: ");
-                    codi = scan.nextInt();
-                    scan.nextLine();
+                    codi = scan.nextLine();
 
+                    llista.add(new Textil(nom, preu, codi, compoTextil));
+                    afegirProducte(nom, codi);
 
                     break;
                 case 3:
@@ -111,9 +93,10 @@ public class Main {
                     diesGaran = scan.nextInt();
                     scan.nextLine();
                     System.out.print("Codi de barres: ");
-                    codi = scan.nextInt();
-                    scan.nextLine();
+                    codi = scan.nextLine();
 
+                    llista.add(new Electronica(nom, preu, codi, diesGaran));
+                    afegirProducte(nom, codi);
 
                     break;
                 default:
@@ -121,11 +104,55 @@ public class Main {
             }
         } while (opcioMenuProd != 0);
     }
+
+    // MIRAR
+    protected static  void afegirProducteLlista (String nom, String codi, float preu, char tipus) {
+        if (tipus == 'A') {
+
+
+
+        } else if (tipus == 'E') {
+
+
+
+        } else {
+
+
+
+        }
+
+    }
+    /**
+     * Funció: Afegeix a un HashMap el producte, comprovant si el codi del producte ja està registrat, pel cas que
+     * estigui registrat se li sumarà al comptador 1, si no està guardat es guardarà i se li assignarà 1 en Unitats.
+     * @param nom El nom del producte que volem "comprar".
+     * @param codi El codi del producte.
+     */
+    protected static void afegirProducte(String nom, String codi) {
+        String[] produc = new String[2];
+
+        if (llistaCompra.containsKey(codi)){
+            // En aquest cas assignem el nom del primer contacte, ja que si són noms diferents jo faig que es quedi el primer.
+            String nomProc = llistaCompra.get(codi)[0];
+            int num = Integer.parseInt(llistaCompra.get(codi)[1]) + 1;
+
+            produc[0] = nomProc;
+            produc[1] = "" + num;
+            llistaCompra.replace(codi, produc);
+        } else {
+            produc[0] = nom;
+            produc[1] = "1";
+            llistaCompra.put(codi, produc);
+        }
+    }
+
+
+    /**
+     * Funció: En aquest cas imprimeix tot el carro per "pagar" i es mostra tant el nom, preu, unitats, preu total de
+     * cada producte. A més de veure el total de la compra i buidar tot el carro.
+     */
     protected static void passarPerCaixa() {
         float preuTotal = 0;
-
-
-
 
         LocalDate actual = LocalDate.now();
         System.out.println("------------------------------");
@@ -133,18 +160,25 @@ public class Main {
         System.out.println("------------------------------");
         System.out.println(actual);
         System.out.println("------------------------------");
-        System.out.printf("%-10s %7s %11s %10s", "Nom:", "Unitats", "Preu Unitat", "Preu Total");   //%,11.2f
-        for (int i = 1; i < 5; i++) {
+        System.out.printf("%-10s %10s %15s %15s", "Nom:", "Unitats", "Preu Unitat", "Preu Total");   //%,11.2f
+        for (int i = 0; i < llista.size(); i++) {
             preuTotal += i;
-            System.out.println("hola: " + llistaCompra.get(i));
-            System.out.println(i);
+            System.out.printf("%-10s %10s %15s %15s", llista.get(i).getNomProducte(), llista.get(i).getNomProducte(), llista.get(i).getNomProducte(), llista.get(i).getNomProducte());
         }
         System.out.println("------------------------------");
         System.out.println("Total: " + preuTotal);
-    }
-    protected static void mostrarCarroDeCompra() {
-        System.out.println("CARRET");
 
+        llistaCompra.clear();
+        llista.clear();
+    }
+
+    /**
+     * Funció: En aquest cas imprimeix tota la llista del carro (en aquest cas està dins d'un HashMap i ho imprimim amb
+     * ajuda de lambda expressions).
+     */
+    protected static void mostrarCarroDeCompra() {
+        System.out.println("CARRET\n");
+        llistaCompra.forEach((k, v) -> System.out.printf("%s --> %s\n", v[0], v[1]));
     }
 
     public static void menuInici () {

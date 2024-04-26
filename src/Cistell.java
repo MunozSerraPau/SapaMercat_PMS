@@ -1,4 +1,6 @@
 public class Cistell {
-    protected int quantitatUnitats ;
+    protected int quantitatUnitats;
+
+
 
 }

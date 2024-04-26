@@ -11,7 +11,7 @@ public class Alimentacio extends Productes {
     protected int mes;
     protected int any;
 
-    public Alimentacio(String nomProducte, float preuProducte, int codiBarresProducte, String dataCaducitatAlimentacio) {
+    public Alimentacio(String nomProducte, float preuProducte, String codiBarresProducte, String dataCaducitatAlimentacio) {
         super(nomProducte, preuProducte, codiBarresProducte);
         this.dataCaducitatAlimentacio = dataCaducitatAlimentacio;
         preu();
@@ -74,6 +74,41 @@ public class Alimentacio extends Productes {
          */
 
     }
+
+
+    public String getDataCaducitatAlimentacio() {
+        return dataCaducitatAlimentacio;
+    }
+    public long getDiesCaducitat() {
+        return diesCaducitat;
+    }
+    public int getDia() {
+        return dia;
+    }
+    public int getMes() {
+        return mes;
+    }
+    public int getAny() {
+        return any;
+    }
+
+
+    public void setDataCaducitatAlimentacio(String dataCaducitatAlimentacio) {
+        this.dataCaducitatAlimentacio = dataCaducitatAlimentacio;
+    }
+    public void setDiesCaducitat(long diesCaducitat) {
+        this.diesCaducitat = diesCaducitat;
+    }
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+    public void setAny(int any) {
+        this.any = any;
+    }
+
 
     @Override
     public String toString() {
