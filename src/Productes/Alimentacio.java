@@ -15,6 +15,7 @@ public class Alimentacio extends Productes {
         super(nomProducte, preuProducte, codiBarresProducte);
         this.dataCaducitatAlimentacio = dataCaducitatAlimentacio;
         preu();
+        codiBarres();
     }
 
 
@@ -25,6 +26,11 @@ public class Alimentacio extends Productes {
 
         //preu - preu*(1/(dataCaducitat-dataActual+1)) + (preu * 0.1)
         super.preuProducte = (float) Math.abs(preuProducte - preuProducte*(1/(diesCaducitat+1)) - (preuProducte * 0.1));
+    }
+
+    @Override
+    public void codiBarres() {
+        super.codiBarresProducte = "Al-" + codiBarresProducte;
     }
 
     private void comprovarDies(String dataCompleta) {

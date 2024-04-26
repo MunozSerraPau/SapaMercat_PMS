@@ -2,6 +2,7 @@ import Productes.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.HashMap;
 
@@ -62,7 +63,8 @@ public class Main {
                     System.out.print("Data de caducitat (dd/mm/aaaa): ");
                     dataCadu = scan.nextLine();
 
-                    llista.add(new Alimentacio(nom, preu, codi, dataCadu));
+
+                    afegirAlimentCarro(nom, preu, codi, dataCadu);
                     afegirProducte(nom, codi);
 
                     break;
@@ -78,7 +80,7 @@ public class Main {
                     System.out.print("Codi de barres: ");
                     codi = scan.nextLine();
 
-                    llista.add(new Textil(nom, preu, codi, compoTextil));
+                    afegirTextilCarro(nom, preu, compoTextil, codi);
                     afegirProducte(nom, codi);
 
                     break;
@@ -95,7 +97,7 @@ public class Main {
                     System.out.print("Codi de barres: ");
                     codi = scan.nextLine();
 
-                    llista.add(new Electronica(nom, preu, codi, diesGaran));
+                    afegirElectronicaCarro(nom, preu, codi, diesGaran);
                     afegirProducte(nom, codi);
 
                     break;
@@ -103,7 +105,28 @@ public class Main {
                     System.out.println("Escriu un numero entre el 1 i el 3, gràcies!");
             }
         } while (opcioMenuProd != 0);
+        ordenarLlista();
     }
+
+    public static void ordenarLlista() {
+
+    }
+
+    public static void afegirAlimentCarro(String nom, float preu, String codi, String dataCadu) {
+
+        llista.add(new Alimentacio(nom, preu, codi, dataCadu));
+
+
+    }
+    public static void afegirTextilCarro(String nom, float preu, String compoTextil, String codi) {
+
+
+        llista.add(new Textil(nom, preu, codi, compoTextil));
+    }
+    public static void afegirElectronicaCarro(String nom, float preu, String codi, int diesGaran) {
+        llista.add(new Electronica(nom, preu, codi, diesGaran));
+    }
+
 
     /**
      * Funció: Afegeix a un HashMap el producte, comprovant si el codi del producte ja està registrat, pel cas que
@@ -114,7 +137,9 @@ public class Main {
     protected static void afegirProducte(String nom, String codi) {
         String[] produc = new String[2];
 
-        if (llistaCompra.containsKey(codi)){
+        if (llistaCompra.containsKey(codi) && llistaCompra.containsValue(codi)) {
+
+        } else if (llistaCompra.containsKey(codi)){
             // En aquest cas assignem el nom del primer contacte, ja que si són noms diferents jo faig que es quedi el primer.
             String nomProc = llistaCompra.get(codi)[0];
             int num = Integer.parseInt(llistaCompra.get(codi)[1]) + 1;

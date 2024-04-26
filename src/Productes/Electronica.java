@@ -17,6 +17,11 @@ public class Electronica extends Productes {
         super.preuProducte = (float) (preuProducte + preuProducte*(diesGarantiaElectronica/365)*0.1);
     }
 
+    @Override
+    public void codiBarres() {
+        super.codiBarresProducte = "El-" + codiBarresProducte;
+    }
+
 
     @Override
     public String toString() {
