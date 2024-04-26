@@ -105,23 +105,6 @@ public class Main {
         } while (opcioMenuProd != 0);
     }
 
-    // MIRAR
-    protected static  void afegirProducteLlista (String nom, String codi, float preu, char tipus) {
-        if (tipus == 'A') {
-
-
-
-        } else if (tipus == 'E') {
-
-
-
-        } else {
-
-
-
-        }
-
-    }
     /**
      * Funció: Afegeix a un HashMap el producte, comprovant si el codi del producte ja està registrat, pel cas que
      * estigui registrat se li sumarà al comptador 1, si no està guardat es guardarà i se li assignarà 1 en Unitats.
