@@ -81,7 +81,7 @@ public class Main {
                     codi = scan.nextLine();
 
                     afegirTextilCarro(nom, preu, compoTextil, codi);
-                    afegirProducte(nom, codi);
+                    afegirProducteTextil(nom, codi, compoTextil);
 
                     break;
                 case 3:
@@ -119,7 +119,13 @@ public class Main {
 
     }
     public static void afegirTextilCarro(String nom, float preu, String compoTextil, String codi) {
+        /*
+        for (int i = 0; i < llista.size(); i++) {
+            if (llista.get(2).equals(codi)) {
 
+            }
+        }
+         */
 
         llista.add(new Textil(nom, preu, codi, compoTextil));
     }
@@ -135,9 +141,31 @@ public class Main {
      * @param codi El codi del producte.
      */
     protected static void afegirProducte(String nom, String codi) {
-        String[] produc = new String[2];
+        String[] produc = new String[3];
 
-        if (llistaCompra.containsKey(codi) && llistaCompra.containsValue(codi)) {
+        if (llistaCompra.containsKey(codi)){
+            // En aquest cas assignem el nom del primer contacte, ja que si són noms diferents jo faig que es quedi el primer.
+            String nomProc = llistaCompra.get(codi)[0];
+            int num = Integer.parseInt(llistaCompra.get(codi)[1]) + 1;
+
+            produc[0] = nomProc;
+            produc[1] = "" + num;
+            produc[2] = "";
+            llistaCompra.replace(codi, produc);
+        } else {
+            produc[0] = nom;
+            produc[1] = "1";
+            produc[2] = "";
+            llistaCompra.put(codi, produc);
+        }
+    }
+
+    protected static void afegirProducteTextil(String nom, String codi, String compTextil) {
+        String[] produc = {"", "", ""};
+
+        // MIRAR AIXO HAVER QUE PASSA
+        if (llistaCompra.containsValue(produc[2].equals(compTextil))) {
+            System.out.println("Funciona");
 
         } else if (llistaCompra.containsKey(codi)){
             // En aquest cas assignem el nom del primer contacte, ja que si són noms diferents jo faig que es quedi el primer.
@@ -146,13 +174,16 @@ public class Main {
 
             produc[0] = nomProc;
             produc[1] = "" + num;
+            produc[2] = compTextil;
             llistaCompra.replace(codi, produc);
         } else {
             produc[0] = nom;
             produc[1] = "1";
+            produc[2] = compTextil;
             llistaCompra.put(codi, produc);
         }
     }
+
 
 
     /**
