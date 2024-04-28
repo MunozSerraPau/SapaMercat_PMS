@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="UF5_SapaMercat_PMS:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/UF5_SapaMercat_PMS_jar</output-path>
+    <root id="archive" name="UF5_SapaMercat_PMS.jar">
+      <element id="module-output" name="UF5_SapaMercat_PMS" />
+    </root>
+  </artifact>
+</component>

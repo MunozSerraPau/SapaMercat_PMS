@@ -17,7 +17,6 @@ public class Main {
 
     protected static float preuTotal = 0;
 
-    //TOT BE
 
     public static void main(String[] args) {
         int opcioMenuIni;
@@ -318,7 +317,6 @@ public class Main {
     }
 
 
-
     /**
      * Funció: En aquest cas imprimeix tot el carro per "pagar" i es mostra tant el nom, preu, unitats, preu total de
      * cada producte. A més de veure el total de la compra i buidar tot el carro.
@@ -347,6 +345,12 @@ public class Main {
         }
     }
 
+    /**
+     * Funció per afegir el producte a un HAsMap per poder guardar-ho
+     * @param codi El codi del producte
+     * @param preu El preu del producte
+     * @param nom El nom del producte
+     */
     public static void afegirProductesLlistaCaixa(String codi, float preu, String nom) {
 
         String[] produc = new String[3];
@@ -369,68 +373,6 @@ public class Main {
         }
 
     }
-
-    /*
-    public static void llegirPreuTextil(Productes p) {
-        try {
-            File fitxer = new File("./updates/UpdateTextilPrices.dat");
-            HashMap<String, String> textilFitxer = new HashMap<String, String>();
-
-            //Per llegir dades al fitxer.
-            FileReader reader = new FileReader(fitxer);
-            BufferedReader br = new BufferedReader(reader);
-            String fila;
-
-            //Per escriure dades al fitxer
-            FileOutputStream file = new FileOutputStream(fitxer, true);
-            PrintStream writer = new PrintStream(file);
-
-
-            while ((fila = br.readLine()) != null) {
-                String[] valors = fila.split(":");
-                textilFitxer.put(valors[0], valors[1]);
-            }
-
-            String codi = p.getCodiBarres();
-            if (p instanceof Textil){
-                if (textilFitxer.containsKey(codi)) {
-                    //Agafem el preu del fitxer en string.
-                    String preuS = textilFitxer.get(codi);
-                    //El passem a float en una nova variable.
-                    float preu = Float.parseFloat(preuS);
-                    //I donem amb preu el valor actualitzat amb setPreu().
-                    p.setPreu(preu);
-
-                    System.out.println("El preu del producte tèxtil amb codi: " + codi + " ha siguit actualitzat a " + preu);
-                } else {
-                    System.out.println("El codi " + codi + " no s'ha pogut trobar al fitxer de preus");
-                    //Actualitzem el fitxer amb el codi nou i el seu preu.
-                    br.readLine();
-                    writer.println(codi + ":" + p.getPreu());
-                    System.out.println("Nou codi afegit " + codi + " amb el seu respectiu preu " + p.getPreu());
-                    writer.close();
-                }
-            }
-
-            //Hem de modificar el preu en l'array perquè si no aquest canvi no es veuria reflectit.
-            for (int i = 0; i < productes.size(); i++) {
-                if (productes.get(i).getCodiBarres().equals(p.getCodiBarres())) {
-                    productes.get(i).setPreu(p.getPreu());
-                    break;
-                }
-            }
-
-            br.close();
-        } catch (IOException e){
-            System.out.println(e.getMessage());
-            logException(e);
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-            logException(e);
-        }
-    }
-    */
-
 
 
     /**
