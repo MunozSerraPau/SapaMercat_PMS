@@ -1,10 +1,12 @@
 import Productes.*;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.HashMap;
+
 
 public class Main {
     public static Scanner scan = new Scanner(System.in);
@@ -15,6 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
         int opcioMenuIni;
+
+        crearCarpetasFitxers();
 
         do {
             menuInici();
@@ -38,6 +42,31 @@ public class Main {
 
         } while (opcioMenuIni != 0);
         System.exit(1);
+    }
+
+    /**
+     * Funció: Crear l'estructura de carpetas i fitxers
+     */
+    public static void crearCarpetasFitxers() {
+        File c1 = new File("./updates");
+        File c2 = new File("./logs");
+        File f1 = new File("./updates/UpdateTextilPrices.dat");
+        File f2 = new File("./logs/Exceptions.dat");
+
+        try {
+            if(c1.mkdirs() && c2.mkdirs())
+                System.out.println("S'han creat les carpetas correctament.");
+            else
+                System.out.println("Les carpetas no s'han creat, perque ja existeixen.");
+            if (f1.createNewFile() && f2.createNewFile())
+                System.out.println("S'han creat els fitxers correctament.");
+            else
+                System.out.println("Les carpetas no s'han creat, perque ja existeixen.");
+
+        } catch (Exception e) {
+            System.out.println("Les carpetes o els fitxers no s'han creat correctametns");
+        }
+
     }
 
     protected static void comprarProductes() {
@@ -108,7 +137,7 @@ public class Main {
         } while (opcioMenuProd != 0);
         ordenarLlista();
     }
-
+  
     public static void ordenarLlista() {
 
     }
@@ -133,7 +162,6 @@ public class Main {
     public static void afegirElectronicaCarro(String nom, float preu, String codi, int diesGaran) {
         llista.add(new Electronica(nom, preu, codi, diesGaran));
     }
-
 
     /**
      * Funció: Afegeix a un HashMap el producte, comprovant si el codi del producte ja està registrat, pel cas que
@@ -221,6 +249,9 @@ public class Main {
         llistaCompra.forEach((k, v) -> System.out.printf("%s --> %s\n", v[0], v[1]));
     }
 
+    /**
+     * Funció: per mostrar el menu del Inici
+     */
     public static void menuInici () {
         System.out.println("\nBENVINGUT AL SAPAMERCAT");
         System.out.println("------------");
@@ -231,6 +262,9 @@ public class Main {
         System.out.println("3) Mostrar carret de compra");
         System.out.println("0) Acabar");
     }
+    /**
+     * Funció: per mostrar el menu a l'hora de afegir un producte
+     */
     public static void menuProducte () {
         System.out.println("---------------");
         System.out.println("-- PRODUCTE ---");
