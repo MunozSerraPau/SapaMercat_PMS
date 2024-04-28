@@ -1,17 +1,17 @@
 import Productes.*;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-import java.util.HashMap;
+import java.time.*;
+import java.util.*;
 
 
 public class Main {
     public static Scanner scan = new Scanner(System.in);
     protected static ArrayList<Productes> llista = new ArrayList<>(100);
     protected static HashMap<String, String[]> llistaCompra = new HashMap<>();
+
+    private static final int MAX_PRODUCT_CARRO = 100;
+    private static final int MAX_NOM_LLARG = 15;
 
     //TOT BE
 
@@ -82,20 +82,9 @@ public class Main {
 
             switch (opcioMenuProd) {
                 case 1:
-                    System.out.println("Afegir aliment");
-                    System.out.print("Nom producte: ");
-                    nom = scan.nextLine();
-                    System.out.print("preu: ");
-                    preu = scan.nextFloat();
-                    scan.nextLine();
-                    System.out.print("Codi de barres: ");
-                    codi = scan.nextLine();
-                    System.out.print("Data de caducitat (dd/mm/aaaa): ");
-                    dataCadu = scan.nextLine();
 
+                    afegirAlimentCarro();
 
-                    afegirAlimentCarro(nom, preu, codi, dataCadu);
-                    afegirProducte(nom, codi);
 
                     break;
                 case 2:
@@ -111,7 +100,7 @@ public class Main {
                     codi = scan.nextLine();
 
                     afegirTextilCarro(nom, preu, compoTextil, codi);
-                    afegirProducteTextil(nom, codi, compoTextil);
+                    afegirProducte(nom, codi);
 
                     break;
                 case 3:
@@ -142,26 +131,62 @@ public class Main {
 
     }
 
-    public static void afegirAlimentCarro(String nom, float preu, String codi, String dataCadu) {
+    public static void afegirAlimentCarro() {
+        String nom;
+        float preu;
+        String dataCadu;
+        String codi;
 
-        llista.add(new Alimentacio(nom, preu, codi, dataCadu));
+        try {
+            if (llista.size() == MAX_PRODUCT_CARRO) {System.out.println("El carro esta ple, no pot superar els " + MAX_PRODUCT_CARRO + " productes.");
+            } else {
+                System.out.println("Afegir aliment");
+                System.out.print("Nom producte: ");
+                nom = scan.nextLine();
+                if (nom.length() > MAX_NOM_LLARG)
+                    throw new Exception("La llargada no pot ser superor a " + MAX_NOM_LLARG + ".");
+                else if (nom.isEmpty())
+                    throw new Exception("El nom producte no pot estar buit.");
+
+                System.out.print("preu: ");
+                preu = scan.nextFloat();
+                scan.nextLine();
+                if (preu <= 0)
+                    throw new Exception("El preu no pot ser 0 o inferior.");
+
+                System.out.print("Codi de barres (3 dígits): ");
+                codi = scan.nextLine();
+                if (!codi.matches("\\d{3}"))
+                    throw new IllegalArgumentException("El codi ha de estar format per 3 digits.");
+
+                System.out.print("Data de caducitat (dd/mm/aaaa): ");
+                dataCadu = scan.nextLine();
+                if (!dataCadu.matches("[0-3][0-9]/[0|1][0-9]/202[4-8]"))
+                    throw new IllegalArgumentException("LA data de caducitat no esta ben formada.");
 
 
+                afegirProducte(nom, codi);
+                llista.add(new Alimentacio(nom, preu, codi, dataCadu));
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            afegirException(e);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            afegirException(e);
+        }
     }
     public static void afegirTextilCarro(String nom, float preu, String compoTextil, String codi) {
-        /*
-        for (int i = 0; i < llista.size(); i++) {
-            if (llista.get(2).equals(codi)) {
 
-            }
-        }
-         */
 
         llista.add(new Textil(nom, preu, codi, compoTextil));
     }
     public static void afegirElectronicaCarro(String nom, float preu, String codi, int diesGaran) {
         llista.add(new Electronica(nom, preu, codi, diesGaran));
     }
+
+
 
     /**
      * Funció: Afegeix a un HashMap el producte, comprovant si el codi del producte ja està registrat, pel cas que
@@ -170,7 +195,7 @@ public class Main {
      * @param codi El codi del producte.
      */
     protected static void afegirProducte(String nom, String codi) {
-        String[] produc = new String[3];
+        String[] produc = new String[2];
 
         if (llistaCompra.containsKey(codi)){
             // En aquest cas assignem el nom del primer contacte, ja que si són noms diferents jo faig que es quedi el primer.
@@ -179,38 +204,20 @@ public class Main {
 
             produc[0] = nomProc;
             produc[1] = "" + num;
-            produc[2] = "";
             llistaCompra.replace(codi, produc);
         } else {
             produc[0] = nom;
             produc[1] = "1";
-            produc[2] = "";
             llistaCompra.put(codi, produc);
         }
     }
-
-    protected static void afegirProducteTextil(String nom, String codi, String compTextil) {
-        String[] produc = {"", "", ""};
-
-        // MIRAR AIXO HAVER QUE PASSA
-        if (llistaCompra.containsValue(produc[2].equals(compTextil))) {
-            System.out.println("Funciona");
-
-        } else if (llistaCompra.containsKey(codi)){
-            // En aquest cas assignem el nom del primer contacte, ja que si són noms diferents jo faig que es quedi el primer.
-            String nomProc = llistaCompra.get(codi)[0];
-            int num = Integer.parseInt(llistaCompra.get(codi)[1]) + 1;
-
-            produc[0] = nomProc;
-            produc[1] = "" + num;
-            produc[2] = compTextil;
-            llistaCompra.replace(codi, produc);
-        } else {
-            produc[0] = nom;
-            produc[1] = "1";
-            produc[2] = compTextil;
-            llistaCompra.put(codi, produc);
-        }
+    /**
+     * Funció: En aquest cas imprimeix tota la llista del carro (en aquest cas està dins d'un HashMap i ho imprimim amb
+     * ajuda de lambda expressions).
+     */
+    protected static void mostrarCarroDeCompra() {
+        System.out.println("CARRET\n");
+        llistaCompra.forEach((k, v) -> System.out.printf("%s --> %s\n", v[0], v[1]));
     }
 
 
@@ -241,15 +248,6 @@ public class Main {
     }
 
     /**
-     * Funció: En aquest cas imprimeix tota la llista del carro (en aquest cas està dins d'un HashMap i ho imprimim amb
-     * ajuda de lambda expressions).
-     */
-    protected static void mostrarCarroDeCompra() {
-        System.out.println("CARRET\n");
-        llistaCompra.forEach((k, v) -> System.out.printf("%s --> %s\n", v[0], v[1]));
-    }
-
-    /**
      * Funció: per mostrar el menu del Inici
      */
     public static void menuInici () {
@@ -273,5 +271,26 @@ public class Main {
         System.out.println("2) Tèxtil");
         System.out.println("3) Electrònica");
         System.out.println("0) Tornar");
+    }
+
+    public static void afegirException(Exception e) {
+        try {
+            File fitxer = new File("./logs/Exceptions.dat");
+            if (fitxer.exists()) {
+                PrintStream escriureArx = new PrintStream(new FileOutputStream(fitxer, true));
+
+                escriureArx.println("Exception: " + e.getMessage() + " ( " + LocalTime.now() + " ).");
+                escriureArx.close();
+            } else {
+                throw new FileNotFoundException();
+            }
+
+        } catch (FileNotFoundException exception) {
+            System.out.println("No s'ha troba el fitxer.");
+            afegirException(e);
+        } catch (Exception exception){
+            System.out.println("No s'ha pogut escriure en el fitxer");
+            afegirException(e);
+        }
     }
 }
