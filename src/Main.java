@@ -1,4 +1,5 @@
 import Productes.*;
+import com.sun.source.tree.ProvidesTree;
 
 import java.io.*;
 import java.time.*;
@@ -7,11 +8,14 @@ import java.util.*;
 
 public class Main {
     public static Scanner scan = new Scanner(System.in);
-    protected static ArrayList<Productes> llista = new ArrayList<>(100);
+    protected static ArrayList<Productes> llista = new ArrayList<>();
     protected static HashMap<String, String[]> llistaCompra = new HashMap<>();
+    protected static HashMap<String, String[]> llistaCaixa = new HashMap<>();
 
     private static final int MAX_PRODUCT_CARRO = 100;
     private static final int MAX_NOM_LLARG = 15;
+
+    protected static float preuTotal = 0;
 
     //TOT BE
 
@@ -85,52 +89,31 @@ public class Main {
 
                     afegirAlimentCarro();
 
-
                     break;
                 case 2:
-                    System.out.println("Afegir tèxtil");
-                    System.out.print("Nom producte: ");
-                    nom = scan.nextLine();
-                    System.out.print("preu: ");
-                    preu = scan.nextFloat();
-                    scan.nextLine();
-                    System.out.print("Composició: ");
-                    compoTextil = scan.nextLine();
-                    System.out.print("Codi de barres: ");
-                    codi = scan.nextLine();
 
-                    afegirTextilCarro(nom, preu, compoTextil, codi);
-                    afegirProducte(nom, codi);
+                    afegirTextilCarro();
 
                     break;
                 case 3:
-                    System.out.println("Afegir electrònica");
-                    System.out.print("Nom producte: ");
-                    nom = scan.nextLine();
-                    System.out.print("preu: ");
-                    preu = scan.nextFloat();
-                    scan.nextLine();
-                    System.out.print("Garantia (dies): ");
-                    diesGaran = scan.nextInt();
-                    scan.nextLine();
-                    System.out.print("Codi de barres: ");
-                    codi = scan.nextLine();
 
-                    afegirElectronicaCarro(nom, preu, codi, diesGaran);
-                    afegirProducte(nom, codi);
+                    afegirElectronicaCarro();
 
                     break;
+                case 0:
+                    System.out.println("Acabat.");
+                    break;
                 default:
-                    System.out.println("Escriu un numero entre el 1 i el 3, gràcies!");
+                    System.out.println("Escriu un numero entre el 0 i el 3, gràcies!");
             }
         } while (opcioMenuProd != 0);
-        ordenarLlista();
-    }
-  
-    public static void ordenarLlista() {
-
     }
 
+
+    /**
+     * Funcó: Afegir a la llista els productes d'Alimentació i mirant tots els errors que poden haver i guardan-los a un
+     * fitxer
+     */
     public static void afegirAlimentCarro() {
         String nom;
         float preu;
@@ -138,7 +121,8 @@ public class Main {
         String codi;
 
         try {
-            if (llista.size() == MAX_PRODUCT_CARRO) {System.out.println("El carro esta ple, no pot superar els " + MAX_PRODUCT_CARRO + " productes.");
+            if (llista.size() == MAX_PRODUCT_CARRO) {
+                System.out.println("El carro esta ple, no pot superar els " + MAX_PRODUCT_CARRO + " productes.");
             } else {
                 System.out.println("Afegir aliment");
                 System.out.print("Nom producte: ");
@@ -166,9 +150,14 @@ public class Main {
 
 
                 afegirProducte(nom, codi);
+                afegirProductesLlistaCaixa(codi, preu, nom);
+                preuTotal += preu;
                 llista.add(new Alimentacio(nom, preu, codi, dataCadu));
             }
 
+        } catch (InputMismatchException e) {
+            System.out.println(e.getClass());
+            afegirException(e);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             afegirException(e);
@@ -177,16 +166,123 @@ public class Main {
             afegirException(e);
         }
     }
-    public static void afegirTextilCarro(String nom, float preu, String compoTextil, String codi) {
+
+    /**
+     * Funcó: Afegir a la llista els productes Textils i mirant tots els errors que poden haver i guardan-los a un
+     * fitxer
+     */
+    public static void afegirTextilCarro() {
+        String nom;
+        float preu;
+        String compoTextil;
+        String codi;
+
+        try {
+            if (llista.size() == MAX_PRODUCT_CARRO) {
+                System.out.println("El carro esta ple, no pot superar els " + MAX_PRODUCT_CARRO + " productes.");
+            } else {
+                System.out.println("Afegir tèxtil");
+                System.out.print("Nom producte: ");
+                nom = scan.nextLine();
+                if (nom.length() > MAX_NOM_LLARG)
+                    throw new Exception("La llargada no pot ser superor a " + MAX_NOM_LLARG + ".");
+                else if (nom.isEmpty())
+                    throw new Exception("El nom producte no pot estar buit.");
+
+                System.out.print("preu: ");
+                preu = scan.nextFloat();
+                scan.nextLine();
+                if (preu <= 0)
+                    throw new Exception("El preu no pot ser 0 o inferior.");
+
+                System.out.print("Composició: ");
+                compoTextil = scan.nextLine();
+                if (compoTextil.isEmpty())
+                    throw new Exception("S'ha de introduir la composició textil");
+                else if (!compoTextil.matches("[a-zA-Z]+?"))
+                    throw new Exception("La composició nomes pot contenir lletras");
+
+                System.out.print("Codi de barres (3 dígits): ");
+                codi = scan.nextLine();
+                if (!codi.matches("\\d{3}"))
+                    throw new IllegalArgumentException("El codi ha de estar format per 3 digits.");
+
+                afegirProducte(nom, codi);
+                llista.add(new Textil(nom, preu, codi, compoTextil));
+                afegirProductesLlistaCaixa(codi, preu, nom);
+                preuTotal += preu;
+            }
+
+        } catch (InputMismatchException e) {
+            System.out.println(e.getClass());
+            afegirException(e);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            afegirException(e);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            afegirException(e);
+        }
 
 
-        llista.add(new Textil(nom, preu, codi, compoTextil));
     }
-    public static void afegirElectronicaCarro(String nom, float preu, String codi, int diesGaran) {
-        llista.add(new Electronica(nom, preu, codi, diesGaran));
+
+    /**
+     * Funcó: Afegir a la llista els productes Electronics i mirant tots els errors que poden haver i guardan-los a un
+     * fitxer
+     */
+    public static void afegirElectronicaCarro() {
+        String nom;
+        float preu;
+        int diesGaran;
+        String codi;
+
+        try {
+            if (llista.size() == MAX_PRODUCT_CARRO) {
+                System.out.println("El carro esta ple, no pot superar els " + MAX_PRODUCT_CARRO + " productes.");
+            } else {
+                System.out.println("Afegir aliment");
+                System.out.print("Nom producte: ");
+                nom = scan.nextLine();
+                if (nom.length() > MAX_NOM_LLARG)
+                    throw new Exception("La llargada no pot ser superor a " + MAX_NOM_LLARG + ".");
+                else if (nom.isEmpty())
+                    throw new Exception("El nom producte no pot estar buit.");
+
+                System.out.print("preu: ");
+                preu = scan.nextFloat();
+                scan.nextLine();
+                if (preu <= 0)
+                    throw new Exception("El preu no pot ser 0 o inferior.");
+
+                System.out.print("Codi de barres (3 dígits): ");
+                codi = scan.nextLine();
+                if (!codi.matches("\\d{3}"))
+                    throw new IllegalArgumentException("El codi ha de estar format per 3 digits.");
+
+                System.out.print("Garantia (dies): ");
+                diesGaran = scan.nextInt();
+                scan.nextLine();
+
+
+                afegirProducte(nom, codi);
+                llista.add(new Electronica(nom, preu, codi, diesGaran));
+                afegirProductesLlistaCaixa(codi, preu, nom);
+                preuTotal += preu;
+            }
+
+        } catch (InputMismatchException e) {
+            System.out.println(e.getClass());
+            afegirException(e);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            afegirException(e);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            afegirException(e);
+        }
+
     }
-
-
 
     /**
      * Funció: Afegeix a un HashMap el producte, comprovant si el codi del producte ja està registrat, pel cas que
@@ -211,6 +307,7 @@ public class Main {
             llistaCompra.put(codi, produc);
         }
     }
+
     /**
      * Funció: En aquest cas imprimeix tota la llista del carro (en aquest cas està dins d'un HashMap i ho imprimim amb
      * ajuda de lambda expressions).
@@ -227,25 +324,114 @@ public class Main {
      * cada producte. A més de veure el total de la compra i buidar tot el carro.
      */
     protected static void passarPerCaixa() {
-        float preuTotal = 0;
-
         LocalDate actual = LocalDate.now();
-        System.out.println("------------------------------");
-        System.out.println("SAPAMERCAT");
-        System.out.println("------------------------------");
-        System.out.println(actual);
-        System.out.println("------------------------------");
-        System.out.printf("%-10s %10s %15s %15s", "Nom:", "Unitats", "Preu Unitat", "Preu Total");   //%,11.2f
-        for (int i = 0; i < llista.size(); i++) {
-            preuTotal += i;
-            System.out.printf("%-10s %10s %15s %15s", llista.get(i).getNomProducte(), llista.get(i).getNomProducte(), llista.get(i).getNomProducte(), llista.get(i).getNomProducte());
-        }
-        System.out.println("------------------------------");
-        System.out.println("Total: " + preuTotal);
 
-        llistaCompra.clear();
-        llista.clear();
+        if (llista.isEmpty()) {
+            System.out.println("El carro esta buit, siusplau afegeix algun producte.");
+        } else {
+
+            System.out.println("------------------------------");
+            System.out.println("SAPAMERCAT");
+            System.out.println("------------------------------");
+            System.out.println(actual);
+            System.out.println("------------------------------");
+            System.out.printf("%-10s %10s %15s %15s", "Nom:", "Unitats", "Preu Unitat", "Preu Total\n");   //%,11.2f
+            llistaCaixa.forEach((k, v) -> System.out.printf("%-10s %10s %15s %15s\n", v[0], v[1], v[2], (Float.parseFloat(v[2]) * Float.parseFloat(v[1]))));
+            System.out.println("------------------------------");
+
+            System.out.println("Total: " + preuTotal);
+
+            llistaCompra.clear();
+            llistaCaixa.clear();
+            llista.clear();
+        }
     }
+
+    public static void afegirProductesLlistaCaixa(String codi, float preu, String nom) {
+
+        String[] produc = new String[3];
+
+        String codiPreu = codi + preu;
+
+        if (llistaCaixa.containsKey(codiPreu)) {
+            String nomProc = llistaCaixa.get(codiPreu)[0];
+            int num = Integer.parseInt(llistaCompra.get(codiPreu)[1]) + 1;
+
+            produc[0] = nomProc;
+            produc[1] = "" + num;
+            produc[2] = "" + preu;
+            llistaCompra.replace(codiPreu, produc);
+        } else {
+            produc[0] = nom;
+            produc[1] = "1";
+            produc[2] = "" + preu;
+            llistaCompra.put(codiPreu, produc);
+        }
+
+    }
+
+    /*
+    public static void llegirPreuTextil(Productes p) {
+        try {
+            File fitxer = new File("./updates/UpdateTextilPrices.dat");
+            HashMap<String, String> textilFitxer = new HashMap<String, String>();
+
+            //Per llegir dades al fitxer.
+            FileReader reader = new FileReader(fitxer);
+            BufferedReader br = new BufferedReader(reader);
+            String fila;
+
+            //Per escriure dades al fitxer
+            FileOutputStream file = new FileOutputStream(fitxer, true);
+            PrintStream writer = new PrintStream(file);
+
+
+            while ((fila = br.readLine()) != null) {
+                String[] valors = fila.split(":");
+                textilFitxer.put(valors[0], valors[1]);
+            }
+
+            String codi = p.getCodiBarres();
+            if (p instanceof Textil){
+                if (textilFitxer.containsKey(codi)) {
+                    //Agafem el preu del fitxer en string.
+                    String preuS = textilFitxer.get(codi);
+                    //El passem a float en una nova variable.
+                    float preu = Float.parseFloat(preuS);
+                    //I donem amb preu el valor actualitzat amb setPreu().
+                    p.setPreu(preu);
+
+                    System.out.println("El preu del producte tèxtil amb codi: " + codi + " ha siguit actualitzat a " + preu);
+                } else {
+                    System.out.println("El codi " + codi + " no s'ha pogut trobar al fitxer de preus");
+                    //Actualitzem el fitxer amb el codi nou i el seu preu.
+                    br.readLine();
+                    writer.println(codi + ":" + p.getPreu());
+                    System.out.println("Nou codi afegit " + codi + " amb el seu respectiu preu " + p.getPreu());
+                    writer.close();
+                }
+            }
+
+            //Hem de modificar el preu en l'array perquè si no aquest canvi no es veuria reflectit.
+            for (int i = 0; i < productes.size(); i++) {
+                if (productes.get(i).getCodiBarres().equals(p.getCodiBarres())) {
+                    productes.get(i).setPreu(p.getPreu());
+                    break;
+                }
+            }
+
+            br.close();
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+            logException(e);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            logException(e);
+        }
+    }
+    */
+
+
 
     /**
      * Funció: per mostrar el menu del Inici
@@ -273,6 +459,11 @@ public class Main {
         System.out.println("0) Tornar");
     }
 
+    /**
+     * Funció: per afegir les exceptions que van sortin a un arxiu pero poder veure un resum de tots els errors que han
+     * sortit, i amb aqeust metode obrim l'arxiu afegim l'inforamció del probelma hi ha l'hora que ha sigut.
+     * @param e Es l'Exception que ha aparegut
+     */
     public static void afegirException(Exception e) {
         try {
             File fitxer = new File("./logs/Exceptions.dat");
