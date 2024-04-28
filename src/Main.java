@@ -360,12 +360,12 @@ public class Main {
             produc[0] = nomProc;
             produc[1] = "" + num;
             produc[2] = "" + preu;
-            llistaCompra.replace(codiPreu, produc);
+            llistaCaixa.replace(codiPreu, produc);
         } else {
             produc[0] = nom;
             produc[1] = "1";
             produc[2] = "" + preu;
-            llistaCompra.put(codiPreu, produc);
+            llistaCaixa.put(codiPreu, produc);
         }
 
     }
