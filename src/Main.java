@@ -11,6 +11,7 @@ public class Main {
     protected static ArrayList<Productes> llista = new ArrayList<>(100);
     protected static HashMap<String, String[]> llistaCompra = new HashMap<>();
 
+    //TOT BE
 
     public static void main(String[] args) {
         int opcioMenuIni;
