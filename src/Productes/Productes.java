@@ -25,5 +25,6 @@ public abstract class Productes {
 
     // Mètode sobreescrit en algunes subclasses (polimorfisme) pel Preu, ja que es calcula diferent en cada producte.
     public abstract void preu();
+    public abstract void codiBarres();
 
 }

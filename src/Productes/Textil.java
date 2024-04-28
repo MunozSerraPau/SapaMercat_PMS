@@ -6,11 +6,15 @@ public class Textil extends Productes {
     public Textil(String nomProducte, float preuProducte, String codiBarresProducte, String composicioTextil) {
         super(nomProducte, preuProducte, codiBarresProducte);
         this.composicioTextil = composicioTextil;
+
     }
 
     @Override
-    public void preu() {
+    public void preu() { }
 
+    @Override
+    public void codiBarres() {
+        super.codiBarresProducte = "Te-" + codiBarresProducte;
     }
 
     @Override
