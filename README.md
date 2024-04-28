@@ -1,34 +1,23 @@
-Enunciat
+Aquest codi Java és un programa bàsic de gestió de compres anomenat "SAPAMERCAT". Ens permet afegir productes de diferents categories a un carret de compres, mostrar el contingut del carret, passar per caixa per "pagar" i registrar les excepcions que ocorrin durant l'execució del programa i guardar-ho en un fitxer de registres.
 
-La multinacional SAPAMERCAT us demana que li dissenyeu una aplicació revolucionaria! Consisteix en fer que el carro de la compra mostri, en temps real, el preu dels productes que s'hi van introduint.
+### Estructura del Codi i com ho he organitzat:
 
-L'empresa us indica que l'aplicació, de moment, només ha de permetre gestionar les dades d'uns quants dels seus productes: alimentació, tèxtil i electrònica. Aquests productes tenen unes característiques comuns (preu, nom i codi de barres) i un conjunt de característiques específiques de cada tipus de producte:
+1. **Importacions de paquets**: Importa les classes necessàries del paquet `Productes` i altres classes com `Scanner`, `File`, `PrintStream`, `LocalTime`, `ArrayList`, `HashMap`, etc.
 
-- Alimentació: data de caducitat.
-    - El preu d'aquest tipus de producte varia en funció dels dies que falten per caducar, segons la fórmula:
-    - preu - preu*(1/(dataCaducitat-dataActual+1)) + (preu * 0.1)
+2. **Declaracions de Variables**: Declara variables estàtiques i constants per a la gestió de productes, preus, carret de compres, etc.
 
-- Tèxtil: composició tèxtil (text)
-- Electrònica: dies de garantia (numèric
-  - El preu d'aquest tipus de producte varia en funció dels dies que té de garantia segons la fórmula:
-  - preu + preu*(diesGarantia/365)*0.1
+3. **Mètode `crearCarpetasFitxers()`**: Crea l'estructura de carpetes i fitxers necessaris per al programa.
 
-L'aplicació que heu de fer ha de permetre emmagatzemar tots els productes que s'hi van introduint (màxim 100 productes) i calcular-ne el preu.
+4. **Mètodes `comprarProductes()`, `afegirAlimentCarro()`, `afegirTextilCarro()`, `afegirElectronicaCarro()`**: Permeten a l'usuari afegir productes d'alimentació, tèxtils o electrònics al carret de compres. Manejen excepcions i validen l'entrada de l'usuari.
 
-També ha de permetre que, en passar per caixa, es generi el tiquet de compra i es buidi el carro.
+5. **Mètodes `afegirProducte()`, `afegirProductesLlistaCaixa()`, `mostrarCarroDeCompra()`, `passarPerCaixa()`**: Gestionen l'afegida de productes al carret de compres, mostrant el seu contingut, calculant el preu total i buidant el carret després de pagar.
 
-Fer un programa principal que faci ús de les classes dissenyades. La descripció del que ha de fer aquest programa s'explica a continuació. El programa ha de tenir un menú d'opcions com el següent:
+6. **Mètodes de Menú**: `menuInici()` i `menuProducte()` mostren els menús d'inici i de selecció de productes.
 
-1. Introduir producte En escollir aquesta opció s'ha de mostrar un altre menú d'opcions: Quin tipus de producte vols afegir? 
-    - 1.1. Alimentació En escollir aquesta opció s'ha de demanar que s'entri per teclat les dades d'un producte del tipus Alimentació
-    - 1.2. Tèxtil En escollir aquesta opció s'ha de demanar que s'entri per teclat les dades d'un producte del tipus Tèxtil
-    - 1.3. Electrònica En escollir aquesta opció s'ha de demanar que s'entri per teclat les dades d'un producte del tipus Electrònica
-    - 1.0. Tornar En escollir aquesta opció s'ha de tornar al menú principal
-2. Passar per caixa En escollir aquesta opció se simula que es passen tots els productes per caixa i es genera el tiquet.
-   - El tiquet (es mostra per pantalla) ha de mostrar una capçalera amb: data de la compra i nom del supermercat. A continuació es mostra el detall amb: nom del producte, unitats introduïdes al carro, preu unitari i preu total. Finalment ha de calcular la suma total a pagar.
-   - Si s'han introduït dos productes iguals (tenen el mateix codi de barres i el mateix preu unitari) només es mostrarà una vegada, amb la quantitat total d'aquell producte, és a dir, les unitats.
-   - Aquesta opció també implica buidar el carro de la compra.
-3. Mostrar carro de la compra En escollir aquesta opció es mostra un llistat amb la descripció i quantitat de cada producte (sense preu) que hi ha dins el carro del a compra. En aquest cas, si hi ha productes repetits ho seran si tenen el mateix codi de barres (no cal mirar el preu unitari).
+7. **Mètode `afegirException(Exception e)`**: Registra les excepcions que ocorrin durant l'execució del programa en un fitxer de registre.
 
-0. Sortir En escollir aquesta opció es tanca l'aplicació.
-
+### Notes Finals:
+- No he tingut temps a fer una de les parts de Tèxtil, ja que aquest cap de setmana no he estat a casa i no em vaig organitzar correctament el temps.
+- En el meu cas he triat ArryList, per al fet que ja havia tractat amb ella anteriorment i ja tenia coneixements d'ella
+- HashMap, en aquest cas no havia tractat en cap d'ells, però després de mirar una mica creia que per aquest codi era millor el hashMap, ja que tot ho podia guardar en una Key (el codi o el codi+preu) i tota la resta d'informació podien anar a dins i no tenir cap problema.
+- Pel meu cas he anat afegint tot simultàniament a les diferents cistelles, pel fet que creia que era més fàcil fer-ho al moment i no quan ho necessitava això fa que vagi una mica més lent, però per imprimir ho fa de cop i no ha de calcular-ho tot de cop.
